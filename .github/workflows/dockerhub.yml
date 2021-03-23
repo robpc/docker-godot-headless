@@ -58,7 +58,7 @@ jobs:
           tags: robpc/godot-headless:${{ matrix.version }}-${{ matrix.exports }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
-          build-args: >-
+          build-args: |
             GODOT_VERSION=${{ matrix.version }}
             EXPORT_TEMPLATES=${{ matrix.exports }}
       - # Temp fix
