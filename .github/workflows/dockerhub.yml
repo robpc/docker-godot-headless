@@ -16,7 +16,21 @@ jobs:
         version:
           - 3.2.3
         exports:
+          - linux
+          - osx
+          - win32
+          - win64
+          - win
+          - uwp32
+          - uwp64
+          - uwp
+          - windows
+          - desktop
+          - android
+          - iphone
+          - mobile
           - html
+          - all
     steps:
       - name: Checkout
         uses: actions/checkout@v2
