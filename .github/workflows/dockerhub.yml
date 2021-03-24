@@ -50,12 +50,25 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set Docker Tags
+        env:
+          version: ${{ matrix.version }}
+          exports: ${{ matrix.exports }}
+        run: |
+          docker_tags="robpc/godot-headless:${version}-${exports}"
+          if [ "$exports" -eq "all" ]; then
+            docker_tags="${docker_tags},robpc/godot-headless:${version}"
+            if [ "$version" -eq "3.2.3" ]; then
+              docker_tags="${docker_tags},robpc/godot-headless:latest"
+            fi
+          fi
+          echo "docker_tags=${docker_tags}" >> $GITHUB_ENV
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: robpc/godot-headless:${{ matrix.version }}-${{ matrix.exports }}
+          tags: ${{ env.docker_tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
           build-args: |
