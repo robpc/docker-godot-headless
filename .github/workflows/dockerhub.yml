@@ -56,9 +56,9 @@ jobs:
           exports: ${{ matrix.exports }}
         run: |
           docker_tags="robpc/godot-headless:${version}-${exports}"
-          if [ "$exports" -eq "all" ]; then
+          if [ "$exports" = "all" ]; then
             docker_tags="${docker_tags},robpc/godot-headless:${version}"
-            if [ "$version" -eq "3.2.3" ]; then
+            if [ "$version" = "3.2.3" ]; then
               docker_tags="${docker_tags},robpc/godot-headless:latest"
             fi
           fi
