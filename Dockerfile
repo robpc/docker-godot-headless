@@ -46,14 +46,15 @@ RUN unzip Godot_v${GODOT_VERSION}-stable_export_templates.tpz
 
 FROM base AS export-none
 
-ENV EXPORT_TEMPLATES_DIR "/root/.local/share/godot/templates/${GODOT_VERSION}.stable/"
+ENV XDG_DATA_HOME /usr/local/share
+ENV EXPORT_TEMPLATES_DIR "${XDG_DATA_HOME}/godot/templates/${GODOT_VERSION}.stable/"
 
 RUN mkdir -p /root/.cache
 RUN mkdir -p /root/.config/godot
 
 COPY --from=godot /usr/local/bin/godot /usr/local/bin/godot
 
-ENTRYPOINT ["/usr/local/bin/godot"]
+ENTRYPOINT ["godot"]
 CMD ["--help"]
 
 #------------------------------
