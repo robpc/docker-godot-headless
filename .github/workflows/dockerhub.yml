@@ -1,5 +1,9 @@
 name: Dockerhub
 
+env:
+  docker_repo: robpc/godot-headless
+  latest: 3.2.3
+
 on:
   push:
     branches:
@@ -52,14 +56,16 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set Docker Tags
         env:
+          repo: ${{ env.docker_repo }}
+          latest: ${{ env.latest }}
           version: ${{ matrix.version }}
           exports: ${{ matrix.exports }}
         run: |
-          docker_tags="robpc/godot-headless:${version}-${exports}"
+          docker_tags="${repo}:${version}-${exports}"
           if [ "$exports" = "all" ]; then
-            docker_tags="${docker_tags},robpc/godot-headless:${version}"
-            if [ "$version" = "3.2.3" ]; then
-              docker_tags="${docker_tags},robpc/godot-headless:latest"
+            docker_tags="${docker_tags},${repo}:${version}"
+            if [ "$version" = "$latest" ]; then
+              docker_tags="${docker_tags},${repo}:latest"
             fi
           fi
           echo "docker_tags=${docker_tags}" >> $GITHUB_ENV
