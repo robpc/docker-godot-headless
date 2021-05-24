@@ -15,7 +15,7 @@ ARG EXPORT_TEMPLATES=all
 # Alias for the root image
 FROM debian:stable-slim AS base
 
-ARG GODOT_VERSION=3.3
+ARG GODOT_VERSION=3.3.2
 
 #------------------------------
 # Installs packages to use wget
