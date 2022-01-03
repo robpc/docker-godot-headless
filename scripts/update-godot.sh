@@ -39,7 +39,7 @@ VERSION_PATTERN='[0-9]+\.[0-9]+(\.[0-9]+)?'
 # Update `env.latest`
 sed --in-place --regexp-extended '/latest:/'"s/${VERSION_PATTERN}/${VERSION}/" "${DOCKERHUB_FILE}"
 # Update `jobs.docker.strategy.matrix.version`
-sed --in-place --regexp-extended '/version:/ { n; s/- '"${VERSION_PATTERN}"'/'"${VERSION}"'/ }' "${DOCKERHUB_FILE}"
+sed --in-place --regexp-extended '/version:/ { n; s/'"${VERSION_PATTERN}"'/'"${VERSION}"'/ }' "${DOCKERHUB_FILE}"
 
 # =====================
 # Dockerfile
