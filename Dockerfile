@@ -92,7 +92,7 @@ COPY --from=templates templates/windows_* ${EXPORT_TEMPLATES_DIR}
 FROM export-none AS export-desktop
 
 COPY --from=export-linux ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
-COPY --from=export-osx ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
+COPY --from=export-macos ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
 COPY --from=export-windows ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
