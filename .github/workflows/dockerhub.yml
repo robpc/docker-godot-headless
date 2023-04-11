@@ -21,19 +21,15 @@ jobs:
           - 4.0
         exports:
           - linux
-          - osx
+          - macos
           - win32
           - win64
-          - win
-          - uwp32
-          - uwp64
-          - uwp
           - windows
           - desktop
           - android
-          - iphone
+          - ios
           - mobile
-          - html
+          - web
           - all
     steps:
       - name: Checkout

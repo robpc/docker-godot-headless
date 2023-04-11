@@ -30,9 +30,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Downloads Godot
 FROM wget AS godot
 
-RUN wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
-RUN unzip Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
-RUN mv Godot_v${GODOT_VERSION}-stable_linux_headless.64 /usr/local/bin/godot
+RUN wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+RUN unzip Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+RUN mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 /usr/local/bin/godot
 
 #--------------------------------
 # Downloads the export templates
@@ -65,52 +65,27 @@ COPY --from=templates templates/linux* ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # Only osx template
-FROM export-none AS export-osx
+FROM export-none AS export-macos
 
-COPY --from=templates templates/osx* ${EXPORT_TEMPLATES_DIR}
+COPY --from=templates templates/macos* ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # Only win32 template
 FROM export-none AS export-win32
 
-COPY --from=templates templates/windows_32* ${EXPORT_TEMPLATES_DIR}
+COPY --from=templates templates/windows_*_32* ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # Only win64 template
 FROM export-none AS export-win64
 
-COPY --from=templates templates/windows_64* ${EXPORT_TEMPLATES_DIR}
+COPY --from=templates templates/windows_*_64* ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # Only win template
-FROM export-none AS export-win
-
-COPY --from=templates templates/windows_* ${EXPORT_TEMPLATES_DIR}
-
-#------------------------------
-# Only uwp32 template
-FROM export-none AS export-uwp32
-
-COPY --from=templates templates/uwp_x86* ${EXPORT_TEMPLATES_DIR}
-
-#------------------------------
-# Only uwp64 template
-FROM export-none AS export-uwp64
-
-COPY --from=templates templates/uwp_x64* ${EXPORT_TEMPLATES_DIR}
-
-#------------------------------
-# All uwp templates
-FROM export-none AS export-uwp
-
-COPY --from=templates templates/uwp_* ${EXPORT_TEMPLATES_DIR}
-
-#------------------------------
-# All windows templates
 FROM export-none AS export-windows
 
-COPY --from=export-uwp ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
-COPY --from=export-win ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
+COPY --from=templates templates/windows_* ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # All desktop templates
@@ -128,22 +103,22 @@ COPY --from=templates templates/android* ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # All iphone templates
-FROM export-none AS export-iphone
+FROM export-none AS export-ios
 
-COPY --from=templates templates/iphone* ${EXPORT_TEMPLATES_DIR}
+COPY --from=templates templates/ios* ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # All mobile templates
 FROM export-none AS export-mobile
 
 COPY --from=export-android ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
-COPY --from=export-iphone ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
+COPY --from=export-ios ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # Only HTML template
-FROM export-none AS export-html
+FROM export-none AS export-web
 
-COPY --from=templates templates/webassembly* ${EXPORT_TEMPLATES_DIR}
+COPY --from=templates templates/web* ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # All templates

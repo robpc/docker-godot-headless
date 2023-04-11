@@ -56,7 +56,7 @@ sed --in-place --regexp-extended '/image: godot-headless:/'"s/${VERSION_PATTERN}
 # List of tag variations
 sed --in-place --regexp-extended '/The tags follow the Godot version/,/Legacy/ { s/'"${VERSION_PATTERN}/${VERSION}"'/g }' "${README_FILE}"
 # List of older versions supported
-legacy_version_expression='/Legacy versions/ { 
+legacy_version_expression='/Prior versions/ { 
     n;
     n;
     i- `'"${PREVIOUS}"'`

@@ -23,21 +23,58 @@ The tags follow the Godot version and allow for different export template instal
 - `4.0`, `4.0-all`, `latest`
   - `4.0-desktop`
     - `4.0-linux`
-    - `4.0-osx`
+    - `4.0-macos`
     - `4.0-windows`
-      - `4.0-win`
-        - `4.0-win32`
-        - `4.0-win64`
-      - `4.0-uwp`
-        - `4.0-uwp32`
-        - `4.0-uwp64`
+      - `4.0-win32`
+      - `4.0-win64`
   - `4.0-mobile`
     - `4.0-android`
-    - `4.0-iphone`
-  - `4.0-html`
+    - `4.0-ios`
+  - `4.0-web`
+
+Prior versions:
+
+- None
 
 Legacy versions also supported include:
 
+- `3.5.2`, `3.5.2-all`, `latest`
+  - `3.5.2-desktop`
+    - `3.5.2-linux`
+    - `3.5.2-osx`
+    - `3.5.2-windows`
+      - `3.5.2-win`
+        - `3.5.2-win32`
+        - `3.5.2-win64`
+      - `3.5.2-uwp`
+        - `3.5.2-uwp32`
+        - `3.5.2-uwp64`
+  - `3.5.2-mobile`
+    - `3.5.2-android`
+    - `3.5.2-iphone`
+  - `3.5.2-html`
+
+- `3.5.2`
+- `3.5.1`
+- `3.5`
+- `3.4.5`
+- `3.4.4`
+- `3.4.3`
+- `3.4.2`
+- `3.5.2`
+- `3.5.1`
+- `3.5`
+- `3.4.5`
+- `3.4.4`
+- `3.4.3`
+- `3.4.2`
+- `3.5.2`
+- `3.5.1`
+- `3.5`
+- `3.4.5`
+- `3.4.4`
+- `3.4.3`
+- `3.4.2`
 - `3.5.2`
 - `3.5.1`
 - `3.5`
