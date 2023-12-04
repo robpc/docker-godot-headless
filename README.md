@@ -10,7 +10,7 @@ The entrypoint calls the Godot Engine (`/usr/local/bin/godot`) so override the `
 version: '2'
 services:
   godot:
-    image: godot-headless:4.0.2-desktop
+    image: godot-headless:4.0.3-desktop
     volumes:
       - ./:/project
     command: --path /project --export win64 bin/win64/maze-test.exe
@@ -18,24 +18,25 @@ services:
 
 ## Docker Tags
 
-The tags follow the Godot version and allow for different export template installs (for filesize). When in doubt use the base version (ex. 4.0.2) which includes all templates provided by Godot.
+The tags follow the Godot version and allow for different export template installs (for filesize). When in doubt use the base version (ex. 4.0.3) which includes all templates provided by Godot.
 
-- `4.0.2`, `4.0.2-all`, `latest`
-  - `4.0.2-desktop`
-    - `4.0.2-linux`
-    - `4.0.2-macos`
-    - `4.0.2-windows`
-      - `4.0.2-win32`
-      - `4.0.2-win64`
-  - `4.0.2-mobile`
-    - `4.0.2-android`
-    - `4.0.2-ios`
-  - `4.0.2-web`
+- `4.0.3`, `4.0.3-all`, `latest`
+  - `4.0.3-desktop`
+    - `4.0.3-linux`
+    - `4.0.3-macos`
+    - `4.0.3-windows`
+      - `4.0.3-win32`
+      - `4.0.3-win64`
+  - `4.0.3-mobile`
+    - `4.0.3-android`
+    - `4.0.3-ios`
+  - `4.0.3-web`
 
 Prior versions:
 
-- `4.0.1`
-- `4.0`
+- `4.0.2`
+- `4.0.3`
+- `4.0.3`
 
 Legacy versions also supported include:
 
