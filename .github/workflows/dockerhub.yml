@@ -2,7 +2,7 @@ name: Dockerhub
 
 env:
   docker_repo: robpc/godot-headless
-  latest: 4.1.1
+  latest: 4.1.2
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         version:
-          - '4.1.1'
+          - '4.1.2'
         exports:
           - linux
           - macos
