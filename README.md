@@ -45,21 +45,21 @@ Prior versions:
 
 Legacy versions also supported include:
 
-- `3.5.2`, `3.5.2-all`, `latest`
-  - `3.5.2-desktop`
-    - `3.5.2-linux`
-    - `3.5.2-osx`
-    - `3.5.2-windows`
-      - `3.5.2-win`
-        - `3.5.2-win32`
-        - `3.5.2-win64`
-      - `3.5.2-uwp`
-        - `3.5.2-uwp32`
-        - `3.5.2-uwp64`
-  - `3.5.2-mobile`
-    - `3.5.2-android`
-    - `3.5.2-iphone`
-  - `3.5.2-html`
+- `3.5.3`, `3.5.3-all`, `latest`
+  - `3.5.3-desktop`
+    - `3.5.3-linux`
+    - `3.5.3-osx`
+    - `3.5.3-windows`
+      - `3.5.3-win`
+        - `3.5.3-win32`
+        - `3.5.3-win64`
+      - `3.5.3-uwp`
+        - `3.5.3-uwp32`
+        - `3.5.3-uwp64`
+  - `3.5.3-mobile`
+    - `3.5.3-android`
+    - `3.5.3-iphone`
+  - `3.5.3-html`
 
 - `3.5.2`
 - `3.5.1`
