@@ -20,20 +20,21 @@ services:
 
 The tags follow the Godot version and allow for different export template installs (for filesize). When in doubt use the base version (ex. 4.2) which includes all templates provided by Godot.
 
-- `4.2`, `4.2-all`, `latest`
-  - `4.2-desktop`
-    - `4.2-linux`
-    - `4.2-macos`
-    - `4.2-windows`
-      - `4.2-win32`
-      - `4.2-win64`
-  - `4.2-mobile`
-    - `4.2-android`
-    - `4.2-ios`
-  - `4.2-web`
+- `4.2.1`, `4.2.1-all`, `latest`
+  - `4.2.1-desktop`
+    - `4.2.1-linux`
+    - `4.2.1-macos`
+    - `4.2.1-windows`
+      - `4.2.1-win32`
+      - `4.2.1-win64`
+  - `4.2.1-mobile`
+    - `4.2.1-android`
+    - `4.2.1-ios`
+  - `4.2.1-web`
 
 Prior versions:
 
+- `4.2`
 - `4.1.3`
 - `4.1.2`
 - `4.1.1`
