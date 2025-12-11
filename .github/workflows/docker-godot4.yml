@@ -1,4 +1,4 @@
-name: Dockerhub Legacy
+name: Docker Godot 4
 
 env:
   docker_repo: robpc/godot-headless
@@ -8,9 +8,9 @@ on:
     branches:
       - main
     paths:
-      - godot3/**
+      - godot4/**
       - scripts/**
-      - .github/workflows/dockerhub-legacy.yml
+      - .github/workflows/dockerhub.yml
   workflow_dispatch:
     inputs:
       version:
@@ -44,7 +44,7 @@ jobs:
           if [ "${FORCE_REBUILD:-false}" = "true" ]; then
             FORCE_ARGS="${FORCE_ARGS} --force"
           fi
-          python3 scripts/plan-builds.py --versions-file godot3/versions.yml --repository "${{ env.docker_repo }}" --output build-plan.json ${FORCE_ARGS}
+          python3 scripts/plan-builds.py --versions-file godot4/versions.yml --repository "${{ env.docker_repo }}" --output build-plan.json ${FORCE_ARGS}
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
 import json, pathlib
 plan = json.loads(pathlib.Path('build-plan.json').read_text())
@@ -105,7 +105,10 @@ PY
           build-args: |
             GODOT_VERSION=${{ matrix.version }}
             EXPORT_TEMPLATES=${{ matrix.exports }}
-      - name: Move cache
+      - # Temp fix
+        # https://github.com/docker/build-push-action/issues/252
+        # https://github.com/moby/buildkit/issues/1896
+        name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache

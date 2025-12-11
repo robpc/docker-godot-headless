@@ -22,7 +22,7 @@ services:
 - Run `bash scripts/update-godot.sh <version> <previous>` locally to update `godot4/Dockerfile`, `godot4/versions.yml`, and the README placeholders. (A similar helper can be added for the legacy `godot3` directory if needed.)
 - Or trigger the `Update Godot Version` workflow under *Actions* → *Update Godot Version* and provide the version/previous tags; it will run the script above and open a pull request with the changes.
 - The DockerHub workflow syncs the repo's DockerHub description from this README automatically, so keep the summary section focused on what you want to display there.
-- The DockerHub publishing workflows auto-run when files in their respective directories change: `Dockerhub` builds the 4.x images, while `Dockerhub Legacy` builds 3.x. You can also trigger them (or the manual `Sync README tags` workflow) from the *Actions* tab to rebuild or refresh documentation on demand.
+- The DockerHub publishing workflows auto-run when files in their respective directories change: `Docker Godot 4` builds the 4.x images, while `Docker Godot 3` builds 3.x. You can also trigger them (or the manual `Sync README tags` workflow) from the *Actions* tab to rebuild or refresh documentation on demand.
 
 <!-- BEGIN DOCKER TAGS -->
 
