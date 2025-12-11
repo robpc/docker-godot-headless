@@ -32,7 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Downloads Godot
 FROM wget AS godot
 
-RUN wget ${GODOT_DOWNLOAD_BASE}/${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_linux.x86_64.zip
+RUN wget --retry-connrefused --waitretry=5 --tries=20 --timeout=30 \
+    ${GODOT_DOWNLOAD_BASE}/${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_linux.x86_64.zip
 RUN unzip Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_linux.x86_64.zip
 RUN mv Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_linux.x86_64 /usr/local/bin/godot
 
@@ -40,7 +41,8 @@ RUN mv Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_linux.x86_64 /usr/local/
 # Downloads the export templates
 FROM wget AS templates
 
-RUN wget ${GODOT_DOWNLOAD_BASE}/${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_export_templates.tpz
+RUN wget --retry-connrefused --waitretry=5 --tries=20 --timeout=30 \
+    ${GODOT_DOWNLOAD_BASE}/${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_export_templates.tpz
 RUN unzip Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_export_templates.tpz
 
 #------------------------------
