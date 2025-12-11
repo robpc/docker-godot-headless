@@ -21,7 +21,7 @@ ARG GODOT_DOWNLOAD_BASE=https://github.com/godotengine/godot-builds/releases/dow
 
 #------------------------------
 # Installs packages to use wget
-FROM base as wget
+FROM base AS wget
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -48,8 +48,8 @@ RUN unzip Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_export_templates.tpz
 
 FROM base AS export-none
 
-ENV XDG_DATA_HOME /usr/local/share
-ENV EXPORT_TEMPLATES_DIR "${XDG_DATA_HOME}/godot/export_templates/${GODOT_VERSION}.stable/"
+ENV XDG_DATA_HOME=/usr/local/share
+ENV EXPORT_TEMPLATES_DIR="${XDG_DATA_HOME}/godot/export_templates/${GODOT_VERSION}.stable/"
 
 RUN mkdir -p /root/.cache
 RUN mkdir -p /root/.config/godot
