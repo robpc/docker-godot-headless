@@ -171,6 +171,16 @@ RUN test -e "${EXPORT_TEMPLATES_DIR}/webassembly_release.zip"
 FROM export-none AS export-all
 
 COPY --from=templates templates ${EXPORT_TEMPLATES_DIR}
+RUN test -e "${EXPORT_TEMPLATES_DIR}/linux_x11_32_release" \
+    && test -e "${EXPORT_TEMPLATES_DIR}/linux_x11_64_release" \
+    && test -e "${EXPORT_TEMPLATES_DIR}/windows_32_release.exe" \
+    && test -e "${EXPORT_TEMPLATES_DIR}/windows_64_release.exe" \
+    && test -e "${EXPORT_TEMPLATES_DIR}/uwp_x86_release.zip" \
+    && test -e "${EXPORT_TEMPLATES_DIR}/uwp_x64_release.zip" \
+    && test -e "${EXPORT_TEMPLATES_DIR}/osx.zip" \
+    && test -e "${EXPORT_TEMPLATES_DIR}/android_release.apk" \
+    && test -e "${EXPORT_TEMPLATES_DIR}/iphone.zip" \
+    && test -e "${EXPORT_TEMPLATES_DIR}/webassembly_release.zip"
 
 #---------------------------------------
 # Selects the export-* based on the arg
