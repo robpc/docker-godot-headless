@@ -121,3 +121,37 @@ PY
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ env.docker_repo }}
           readme-filepath: README.md
+
+  refresh-docs:
+    needs: docker
+    if: needs.plan.outputs.count != '0'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Regenerate README tags
+        run: |
+          python3 scripts/render-readme.py
+      - name: Detect README changes
+        id: diff
+        run: |
+          if git diff --quiet README.md; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Create Pull Request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: chore/readme-tags-sync
+          commit-message: Sync README docker tags
+          title: Sync README docker tags with versions.yml
+          body: |
+            README docker tags regenerated from versions.yml after publishing new images.
+          add-paths: README.md

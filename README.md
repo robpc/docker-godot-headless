@@ -24,21 +24,24 @@ services:
 - The DockerHub workflow syncs the repo's DockerHub description from this README automatically, so keep the summary section focused on what you want to display there.
 - The DockerHub publishing workflow auto-runs when files under `godot4/`, `godot3/`, `scripts/`, or the workflow itself change. You can also run it manually from *Actions* → *Dockerhub*. When triggered manually you may optionally rebuild a single version or force a rebuild even if the tag already exists in DockerHub.
 
+<!-- BEGIN DOCKER TAGS -->
+
 ## Docker Tags
 
 The tags follow the Godot version and allow for different export template installs (for filesize). When in doubt use the base version (ex. 4.3) which includes all templates provided by Godot.
 
 - `4.3`, `4.3-all`, `latest`
+  - `4.3-linux`
+  - `4.3-macos`
+  - `4.3-win32`
+  - `4.3-win64`
+  - `4.3-windows`
   - `4.3-desktop`
-    - `4.3-linux`
-    - `4.3-macos`
-    - `4.3-windows`
-      - `4.3-win32`
-      - `4.3-win64`
+  - `4.3-android`
+  - `4.3-ios`
   - `4.3-mobile`
-    - `4.3-android`
-    - `4.3-ios`
   - `4.3-web`
+  - `4.3-all`
 
 Prior versions:
 
@@ -56,43 +59,25 @@ Prior versions:
 
 Legacy versions also supported include:
 
-- `3.5.3`, `3.5.3-all`, `latest`
+- `3.5.3`, `3.5.3-all`
+  - `3.5.3-linux`
+  - `3.5.3-osx`
+  - `3.5.3-win32`
+  - `3.5.3-win64`
+  - `3.5.3-win`
+  - `3.5.3-uwp32`
+  - `3.5.3-uwp64`
+  - `3.5.3-uwp`
+  - `3.5.3-windows`
   - `3.5.3-desktop`
-    - `3.5.3-linux`
-    - `3.5.3-osx`
-    - `3.5.3-windows`
-      - `3.5.3-win`
-        - `3.5.3-win32`
-        - `3.5.3-win64`
-      - `3.5.3-uwp`
-        - `3.5.3-uwp32`
-        - `3.5.3-uwp64`
+  - `3.5.3-android`
+  - `3.5.3-iphone`
   - `3.5.3-mobile`
-    - `3.5.3-android`
-    - `3.5.3-iphone`
   - `3.5.3-html`
+  - `3.5.3-all`
 
-- `3.5.2`
-- `3.5.1`
-- `3.5`
-- `3.4.5`
-- `3.4.4`
-- `3.4.3`
-- `3.4.2`
-- `3.5.2`
-- `3.5.1`
-- `3.5`
-- `3.4.5`
-- `3.4.4`
-- `3.4.3`
-- `3.4.2`
-- `3.5.2`
-- `3.5.1`
-- `3.5`
-- `3.4.5`
-- `3.4.4`
-- `3.4.3`
-- `3.4.2`
+Older Godot 3 releases:
+
 - `3.5.2`
 - `3.5.1`
 - `3.5`
@@ -104,7 +89,9 @@ Legacy versions also supported include:
 - `3.4`
 - `3.3.4`
 - `3.3.3`
-- `3.2.3`
-- `3.3`
-- `3.3.1`
 - `3.3.2`
+- `3.3.1`
+- `3.3`
+- `3.2.3`
+
+<!-- END DOCKER TAGS -->
