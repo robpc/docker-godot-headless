@@ -1,0 +1,110 @@
+name: Docker Godot 3
+
+env:
+  docker_repo: robpc/godot-headless
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - godot3/**
+      - scripts/**
+      - .github/workflows/docker-godot3.yml
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Optional specific version to rebuild
+        required: false
+      force:
+        description: Rebuild even if the tag already exists
+        required: false
+        default: "false"
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      count: ${{ steps.plan.outputs.count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - id: plan
+        env:
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+          FORCE_REBUILD: ${{ github.event.inputs.force }}
+        run: |
+          set -euo pipefail
+          FORCE_ARGS=""
+          if [ -n "${INPUT_VERSION:-}" ]; then
+            FORCE_ARGS="--only-version ${INPUT_VERSION}"
+          fi
+          if [ "${FORCE_REBUILD:-false}" = "true" ]; then
+            FORCE_ARGS="${FORCE_ARGS} --force"
+          fi
+          python3 scripts/plan-builds.py --versions-file godot3/versions.yml --repository "${{ env.docker_repo }}" --output build-plan.json ${FORCE_ARGS}
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+            import json, pathlib
+            plan = json.loads(pathlib.Path('build-plan.json').read_text())
+            print(f"matrix={json.dumps({'include': plan.get('include', [])})}")
+            print(f"count={len(plan.get('include', []))}")
+          PY
+
+  docker:
+    needs: plan
+    if: needs.plan.outputs.count != '0'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.plan.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: docker-${{ matrix.version }}-${{ matrix.exports }}-${{ github.sha }}
+          restore-keys: |
+            docker-${{ matrix.version }}-${{ matrix.exports }}
+            docker-${{ matrix.version }}
+            docker-
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set Docker Tags
+        env:
+          repo: ${{ env.docker_repo }}
+          version: ${{ matrix.version }}
+          exports: ${{ matrix.exports }}
+          latest_version: ${{ matrix.latest }}
+        run: |
+          docker_tags="${repo}:${version}-${exports}"
+          if [ "$exports" = "all" ]; then
+            docker_tags="${docker_tags},${repo}:${version}"
+            if [ -n "$latest_version" ] && [ "$version" = "$latest_version" ]; then
+              docker_tags="${docker_tags},${repo}:latest"
+            fi
+          fi
+          echo "docker_tags=${docker_tags}" >> $GITHUB_ENV
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: ${{ env.docker_tags }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          build-args: |
+            GODOT_VERSION=${{ matrix.version }}
+            EXPORT_TEMPLATES=${{ matrix.exports }}
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
