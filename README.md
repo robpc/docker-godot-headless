@@ -16,6 +16,12 @@ services:
     command: --path /project --export win64 bin/win64/maze-test.exe
 ```
 
+## Updating the Godot version
+
+- Run `bash scripts/update-godot.sh <version> <previous>` locally to update the Docker workflow, Dockerfile, and README placeholders.
+- Or trigger the `Update Godot Version` workflow under *Actions* → *Update Godot Version* and provide the version/previous tags; it will run the same script and open a pull request with the changes.
+- The DockerHub workflow syncs the repo's DockerHub description from this README automatically, so keep the summary section focused on what you want to display there.
+
 ## Docker Tags
 
 The tags follow the Godot version and allow for different export template installs (for filesize). When in doubt use the base version (ex. 4.3) which includes all templates provided by Godot.

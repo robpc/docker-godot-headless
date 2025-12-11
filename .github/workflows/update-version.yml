@@ -1,0 +1,41 @@
+name: Update Godot Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Godot version to promote (e.g. 4.3)
+        required: true
+      previous:
+        description: Previous version to list under legacy releases
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run update script
+        env:
+          VERSION: ${{ inputs.version }}
+          PREVIOUS: ${{ inputs.previous }}
+        run: |
+          set -euo pipefail
+          bash scripts/update-godot.sh "$VERSION" "$PREVIOUS"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: chore/update-godot-${{ inputs.version }}
+          commit-message: Update Godot to v${{ inputs.version }}
+          title: Update Godot version to ${{ inputs.version }}
+          body: |
+            Automated run of `scripts/update-godot.sh` for Godot ${{ inputs.version }}.
+
+            - updated build workflow, Dockerfile, and README
