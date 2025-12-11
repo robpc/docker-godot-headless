@@ -1,0 +1,38 @@
+name: Sync README tags
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  render-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Regenerate README tags
+        run: |
+          python3 scripts/render-readme.py
+      - name: Detect changes
+        id: diff
+        run: |
+          if git diff --quiet README.md; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Create Pull Request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: chore/readme-tags-sync
+          commit-message: Sync README docker tags
+          title: Sync README docker tags with versions.yml
+          body: |
+            README docker tags regenerated from versions.yml.
+          add-paths: README.md
