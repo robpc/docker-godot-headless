@@ -19,8 +19,7 @@ on:
       force:
         description: Rebuild even if the tag already exists
         required: false
-        default: false
-        type: boolean
+        default: "false"
 
 jobs:
   plan:
