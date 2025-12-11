@@ -51,6 +51,7 @@ ENV EXPORT_TEMPLATES_DIR="${XDG_DATA_HOME}/godot/templates/${GODOT_VERSION}.stab
 
 RUN mkdir -p /root/.cache
 RUN mkdir -p /root/.config/godot
+RUN mkdir -p "${EXPORT_TEMPLATES_DIR}"
 
 COPY --from=godot /usr/local/bin/godot /usr/local/bin/godot
 
