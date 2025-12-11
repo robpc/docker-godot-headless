@@ -40,6 +40,13 @@ FROM wget AS templates
 RUN wget --retry-connrefused --waitretry=5 --tries=20 --timeout=30 \
     ${GODOT_DOWNLOAD_BASE}/${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_export_templates.tpz
 RUN unzip Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_export_templates.tpz
+# Fail fast if upstream hasn't published the UWP templates yet.
+RUN if ls templates/uwp_* >/dev/null 2>&1; then \
+      echo "Found UWP templates for ${GODOT_VERSION}"; \
+    else \
+      echo "Missing UWP export templates for ${GODOT_VERSION}. Please verify the release artifacts." >&2; \
+      exit 1; \
+    fi
 
 #------------------------------
 # Clean setup with no templates
@@ -51,7 +58,6 @@ ENV EXPORT_TEMPLATES_DIR="${XDG_DATA_HOME}/godot/templates/${GODOT_VERSION}.stab
 
 RUN mkdir -p /root/.cache
 RUN mkdir -p /root/.config/godot
-RUN mkdir -p "${EXPORT_TEMPLATES_DIR}"
 
 COPY --from=godot /usr/local/bin/godot /usr/local/bin/godot
 
