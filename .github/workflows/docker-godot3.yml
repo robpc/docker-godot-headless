@@ -10,7 +10,7 @@ on:
     paths:
       - godot3/**
       - scripts/**
-      - .github/workflows/dockerhub-legacy.yml
+      - .github/workflows/docker-godot3.yml
   workflow_dispatch:
     inputs:
       version:

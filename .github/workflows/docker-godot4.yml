@@ -10,7 +10,7 @@ on:
     paths:
       - godot4/**
       - scripts/**
-      - .github/workflows/dockerhub.yml
+      - .github/workflows/docker-godot4.yml
   workflow_dispatch:
     inputs:
       version:
