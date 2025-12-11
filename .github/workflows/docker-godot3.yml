@@ -45,11 +45,11 @@ jobs:
           fi
           python3 scripts/plan-builds.py --versions-file godot3/versions.yml --repository "${{ env.docker_repo }}" --output build-plan.json ${FORCE_ARGS}
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
-import json, pathlib
-plan = json.loads(pathlib.Path('build-plan.json').read_text())
-print(f"matrix={json.dumps({'include': plan.get('include', [])})}")
-print(f"count={len(plan.get('include', []))}")
-PY
+            import json, pathlib
+            plan = json.loads(pathlib.Path('build-plan.json').read_text())
+            print(f"matrix={json.dumps({'include': plan.get('include', [])})}")
+            print(f"count={len(plan.get('include', []))}")
+          PY
 
   docker:
     needs: plan
