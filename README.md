@@ -28,23 +28,25 @@ services:
 
 ## Docker Tags
 
-The tags follow the Godot version and allow for different export template installs (for filesize). When in doubt use the base version (ex. 4.3) which includes all templates provided by Godot.
+The tags follow the Godot version and allow for different export template installs (for filesize). When in doubt use the base version which includes all templates provided by Godot.
 
+<!-- BEGIN DOCKER 4 TREE -->
 - `4.3`, `4.3-all`, `latest`
-  - `4.3-linux`
-  - `4.3-macos`
-  - `4.3-win32`
-  - `4.3-win64`
-  - `4.3-windows`
   - `4.3-desktop`
-  - `4.3-android`
-  - `4.3-ios`
+    - `4.3-linux`
+    - `4.3-macos`
+    - `4.3-windows`
+      - `4.3-win32`
+      - `4.3-win64`
   - `4.3-mobile`
+    - `4.3-android`
+    - `4.3-ios`
   - `4.3-web`
-  - `4.3-all`
+<!-- END DOCKER 4 TREE -->
 
 Prior versions:
 
+<!-- BEGIN DOCKER 4 OLDER -->
 - `4.2.2`
 - `4.2.1`
 - `4.2`
@@ -56,28 +58,31 @@ Prior versions:
 - `4.0.2`
 - `4.0.1`
 - `4.0`
+<!-- END DOCKER 4 OLDER -->
 
 Legacy versions also supported include:
 
+<!-- BEGIN DOCKER 3 TREE -->
 - `3.5.3`, `3.5.3-all`
-  - `3.5.3-linux`
-  - `3.5.3-osx`
-  - `3.5.3-win32`
-  - `3.5.3-win64`
-  - `3.5.3-win`
-  - `3.5.3-uwp32`
-  - `3.5.3-uwp64`
-  - `3.5.3-uwp`
-  - `3.5.3-windows`
   - `3.5.3-desktop`
-  - `3.5.3-android`
-  - `3.5.3-iphone`
+    - `3.5.3-linux`
+    - `3.5.3-osx`
+    - `3.5.3-windows`
+      - `3.5.3-win`
+        - `3.5.3-win32`
+        - `3.5.3-win64`
+      - `3.5.3-uwp`
+        - `3.5.3-uwp32`
+        - `3.5.3-uwp64`
   - `3.5.3-mobile`
+    - `3.5.3-android`
+    - `3.5.3-iphone`
   - `3.5.3-html`
-  - `3.5.3-all`
+<!-- END DOCKER 3 TREE -->
 
 Older Godot 3 releases:
 
+<!-- BEGIN DOCKER 3 OLDER -->
 - `3.5.2`
 - `3.5.1`
 - `3.5`
@@ -93,5 +98,6 @@ Older Godot 3 releases:
 - `3.3.1`
 - `3.3`
 - `3.2.3`
+<!-- END DOCKER 3 OLDER -->
 
 <!-- END DOCKER TAGS -->

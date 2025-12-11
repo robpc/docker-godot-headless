@@ -3,8 +3,14 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-BEGIN_MARKER = "<!-- BEGIN DOCKER TAGS -->"
-END_MARKER = "<!-- END DOCKER TAGS -->"
+FOUR_TREE = "<!-- BEGIN DOCKER 4 TREE -->"
+FOUR_TREE_END = "<!-- END DOCKER 4 TREE -->"
+FOUR_OLDER = "<!-- BEGIN DOCKER 4 OLDER -->"
+FOUR_OLDER_END = "<!-- END DOCKER 4 OLDER -->"
+THREE_TREE = "<!-- BEGIN DOCKER 3 TREE -->"
+THREE_TREE_END = "<!-- END DOCKER 3 TREE -->"
+THREE_OLDER = "<!-- BEGIN DOCKER 3 OLDER -->"
+THREE_OLDER_END = "<!-- END DOCKER 3 OLDER -->"
 
 
 def parse_versions_file(path: Path) -> dict:
@@ -47,52 +53,49 @@ def normalize_bool(value: object) -> bool:
     return str(value).strip().lower() in {"1", "true", "yes", "on"}
 
 
-def render_family(latest: str, exports: list[str], provides_latest: bool) -> list[str]:
-    tags = [f"- `{latest}`, `{latest}-all`"]
-    if provides_latest:
-        tags[0] = tags[0] + ", `latest`"
-    for export in exports:
-        tags.append(f"  - `{latest}-{export}`")
-    return tags
-
-
-def render_sections(godot4: dict, godot3: dict) -> str:
-    modern_latest = str(godot4.get("latest", ""))
-    godot4_exports = [str(e) for e in godot4.get("exports", [])]
-    godot3_exports = [str(e) for e in godot3.get("exports", [])]
-
-    lines: list[str] = [
-        "## Docker Tags",
-        "",
-        (
-            "The tags follow the Godot version and allow for different export template installs "
-            f"(for filesize). When in doubt use the base version (ex. {modern_latest}) which includes "
-            "all templates provided by Godot."
-        ),
-        "",
+def render_godot4_tree(latest: str) -> list[str]:
+    return [
+        "- `{0}`, `{0}-all`, `latest`".format(latest),
+        "  - `{0}-desktop`".format(latest),
+        "    - `{0}-linux`".format(latest),
+        "    - `{0}-macos`".format(latest),
+        "    - `{0}-windows`".format(latest),
+        "      - `{0}-win32`".format(latest),
+        "      - `{0}-win64`".format(latest),
+        "  - `{0}-mobile`".format(latest),
+        "    - `{0}-android`".format(latest),
+        "    - `{0}-ios`".format(latest),
+        "  - `{0}-web`".format(latest),
     ]
 
-    lines.extend(render_family(modern_latest, godot4_exports, normalize_bool(godot4.get("provides_latest", False))))
-    lines.append("")
-    lines.append("Prior versions:")
-    lines.append("")
-    for version in [str(v) for v in godot4.get("versions", []) if str(v) != modern_latest]:
-        lines.append(f"- `{version}`")
 
-    lines.append("")
-    lines.append("Legacy versions also supported include:")
-    lines.append("")
+def render_godot3_tree(latest: str, provides_latest: bool) -> list[str]:
+    latest_line = f"- `{latest}`, `{latest}-all`"
+    if provides_latest:
+        latest_line += ", `latest`"
+    return [
+        latest_line,
+        "  - `{0}-desktop`".format(latest),
+        "    - `{0}-linux`".format(latest),
+        "    - `{0}-osx`".format(latest),
+        "    - `{0}-windows`".format(latest),
+        "      - `{0}-win`".format(latest),
+        "        - `{0}-win32`".format(latest),
+        "        - `{0}-win64`".format(latest),
+        "      - `{0}-uwp`".format(latest),
+        "        - `{0}-uwp32`".format(latest),
+        "        - `{0}-uwp64`".format(latest),
+        "  - `{0}-mobile`".format(latest),
+        "    - `{0}-android`".format(latest),
+        "    - `{0}-iphone`".format(latest),
+        "  - `{0}-html`".format(latest),
+    ]
 
-    legacy_latest = str(godot3.get("latest", ""))
-    lines.extend(render_family(legacy_latest, godot3_exports, normalize_bool(godot3.get("provides_latest", False))))
-    lines.append("")
-    lines.append("Older Godot 3 releases:")
-    lines.append("")
-    for version in [str(v) for v in godot3.get("versions", []) if str(v) != legacy_latest]:
-        lines.append(f"- `{version}`")
 
-    lines.append("")
-    return "\n".join(lines)
+def replace_section(text: str, start_marker: str, end_marker: str, content: str) -> str:
+    start_idx = text.index(start_marker) + len(start_marker)
+    end_idx = text.index(end_marker)
+    return text[:start_idx] + "\n" + content + "\n" + text[end_idx:]
 
 
 def main() -> int:
@@ -100,22 +103,25 @@ def main() -> int:
     parser.add_argument("--output", default="README.md", help="README file to update")
     args = parser.parse_args()
 
-    readme_path = Path(args.output)
-    text = readme_path.read_text()
-    try:
-        begin = text.index(BEGIN_MARKER)
-        end = text.index(END_MARKER)
-    except ValueError as exc:
-        raise SystemExit("Could not find README markers for docker tags") from exc
-
-    before = text[: begin + len(BEGIN_MARKER)]
-    after = text[end:]
-
     godot4 = parse_versions_file(Path("godot4/versions.yml"))
     godot3 = parse_versions_file(Path("godot3/versions.yml"))
-    rendered = "\n" + render_sections(godot4, godot3) + "\n"
+    modern_latest = str(godot4.get("latest", ""))
+    legacy_latest = str(godot3.get("latest", ""))
 
-    readme_path.write_text(before + "\n" + rendered + after)
+    modern_versions = [str(v) for v in godot4.get("versions", []) if str(v) != modern_latest]
+    legacy_versions = [str(v) for v in godot3.get("versions", []) if str(v) != legacy_latest]
+
+    text = Path(args.output).read_text()
+    text = replace_section(text, FOUR_TREE, FOUR_TREE_END, "\n".join(render_godot4_tree(modern_latest)))
+    text = replace_section(text, FOUR_OLDER, FOUR_OLDER_END, "\n".join(f"- `{v}`" for v in modern_versions))
+    text = replace_section(
+        text,
+        THREE_TREE,
+        THREE_TREE_END,
+        "\n".join(render_godot3_tree(legacy_latest, normalize_bool(godot3.get("provides_latest", False)))),
+    )
+    text = replace_section(text, THREE_OLDER, THREE_OLDER_END, "\n".join(f"- `{v}`" for v in legacy_versions))
+    Path(args.output).write_text(text)
     return 0
 
 
