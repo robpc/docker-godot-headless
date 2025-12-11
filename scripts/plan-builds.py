@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Set
 
 
 def parse_versions_file(path: Path) -> dict:
@@ -44,20 +44,22 @@ def parse_versions_file(path: Path) -> dict:
     return data
 
 
-def tag_exists(namespace: str, repo: str, tag: str) -> bool:
-    encoded_tag = urllib.parse.quote(tag, safe="")
-    url = (
+def fetch_existing_tags(namespace: str, repo: str) -> Set[str]:
+    tags: Set[str] = set()
+    next_url: str | None = (
         f"https://hub.docker.com/v2/repositories/"
-        f"{urllib.parse.quote(namespace)}/{urllib.parse.quote(repo)}/tags/{encoded_tag}/"
+        f"{urllib.parse.quote(namespace)}/{urllib.parse.quote(repo)}/tags?page_size=100"
     )
-    request = urllib.request.Request(url)
-    try:
+    while next_url:
+        request = urllib.request.Request(next_url)
         with urllib.request.urlopen(request, timeout=10) as response:
-            return response.status == 200
-    except urllib.error.HTTPError as err:
-        if err.code == 404:
-            return False
-        raise
+            data = json.loads(response.read().decode("utf-8"))
+        for result in data.get("results", []):
+            name = result.get("name")
+            if isinstance(name, str):
+                tags.add(name)
+        next_url = data.get("next")
+    return tags
 
 
 def normalize_bool(value: object) -> bool:
@@ -126,6 +128,10 @@ def main() -> int:
     targets = discover_targets(versions_files)
     namespace, repo = args.repository.split("/", 1)
 
+    existing_tags: Set[str] = set()
+    if not args.force:
+        existing_tags = fetch_existing_tags(namespace, repo)
+
     include: list[dict[str, str]] = []
     for target in targets:
         for version in target.versions:
@@ -133,7 +139,7 @@ def main() -> int:
                 continue
             for export in target.exports:
                 tag = f"{version}-{export}"
-                if args.force or not tag_exists(namespace, repo, tag):
+                if args.force or tag not in existing_tags:
                     include.append(
                         {
                             "family": target.name,
