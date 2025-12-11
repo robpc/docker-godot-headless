@@ -10,7 +10,8 @@ on:
       - main
     paths:
       - Dockerfile
-      - .github/workflows/dockerhub.yml
+      - scripts/**
+  workflow_dispatch:
 
 jobs:
   docker:

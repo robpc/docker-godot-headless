@@ -21,6 +21,7 @@ services:
 - Run `bash scripts/update-godot.sh <version> <previous>` locally to update the Docker workflow, Dockerfile, and README placeholders.
 - Or trigger the `Update Godot Version` workflow under *Actions* → *Update Godot Version* and provide the version/previous tags; it will run the same script and open a pull request with the changes.
 - The DockerHub workflow syncs the repo's DockerHub description from this README automatically, so keep the summary section focused on what you want to display there.
+- The DockerHub publishing workflow only auto-runs when `Dockerfile` or files under `scripts/` change; use *Actions* → *Dockerhub* → *Run workflow* if you need to resync the README without changing those files.
 
 ## Docker Tags
 
