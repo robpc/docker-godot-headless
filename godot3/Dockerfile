@@ -12,6 +12,8 @@ ARG EXPORT_TEMPLATES=all
 FROM debian:stable-slim AS base
 
 ARG GODOT_VERSION=3.5.3
+ARG GODOT_RELEASE_CHANNEL=stable
+ARG GODOT_DOWNLOAD_BASE=https://github.com/godotengine/godot-builds/releases/download
 
 #------------------------------
 # Installs packages to use wget
@@ -26,16 +28,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Downloads Godot
 FROM wget AS godot
 
-RUN wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
-RUN unzip Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
-RUN mv Godot_v${GODOT_VERSION}-stable_linux_headless.64 /usr/local/bin/godot
+RUN wget ${GODOT_DOWNLOAD_BASE}/${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_linux_headless.64.zip
+RUN unzip Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_linux_headless.64.zip
+RUN mv Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_linux_headless.64 /usr/local/bin/godot
 
 #--------------------------------
 # Downloads the export templates
 FROM wget AS templates
 
-RUN wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
-RUN unzip Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+RUN wget ${GODOT_DOWNLOAD_BASE}/${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_export_templates.tpz
+RUN unzip Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_export_templates.tpz
 
 #------------------------------
 # Clean setup with no templates
