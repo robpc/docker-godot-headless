@@ -47,7 +47,7 @@ RUN unzip Godot_v${GODOT_VERSION}-${GODOT_RELEASE_CHANNEL}_export_templates.tpz
 FROM base AS export-none
 
 ENV XDG_DATA_HOME=/usr/local/share
-ENV EXPORT_TEMPLATES_DIR="${XDG_DATA_HOME}/godot/templates/${GODOT_VERSION}.stable/"
+ENV EXPORT_TEMPLATES_DIR="${XDG_DATA_HOME}/godot/templates/${GODOT_VERSION}/"
 
 RUN mkdir -p /root/.cache
 RUN mkdir -p /root/.config/godot
@@ -109,8 +109,8 @@ COPY --from=templates templates/uwp_* ${EXPORT_TEMPLATES_DIR}
 # All windows templates (win + uwp)
 FROM export-none AS export-windows
 
-COPY --from=export-uwp ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
 COPY --from=export-win ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
+COPY --from=export-uwp ${EXPORT_TEMPLATES_DIR} ${EXPORT_TEMPLATES_DIR}
 
 #------------------------------
 # All desktop templates
