@@ -1,0 +1,20 @@
+latest: 3.5.3
+provides_latest: false
+versions:
+  - 3.5.3
+exports:
+  - linux
+  - osx
+  - win32
+  - win64
+  - win
+  - uwp32
+  - uwp64
+  - uwp
+  - windows
+  - desktop
+  - android
+  - iphone
+  - mobile
+  - html
+  - all

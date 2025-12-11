@@ -1,0 +1,16 @@
+latest: 4.3
+provides_latest: true
+versions:
+  - 4.3
+exports:
+  - linux
+  - macos
+  - win32
+  - win64
+  - windows
+  - desktop
+  - android
+  - ios
+  - mobile
+  - web
+  - all
