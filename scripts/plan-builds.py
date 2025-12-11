@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Set
+from typing import Iterable
 
 
 def parse_versions_file(path: Path) -> dict:
@@ -44,22 +44,22 @@ def parse_versions_file(path: Path) -> dict:
     return data
 
 
-def fetch_existing_tags(namespace: str, repo: str) -> Set[str]:
-    tags: Set[str] = set()
+def missing_tags(namespace: str, repo: str, desired: set[str]) -> set[str]:
+    remaining = set(desired)
     next_url: str | None = (
         f"https://hub.docker.com/v2/repositories/"
         f"{urllib.parse.quote(namespace)}/{urllib.parse.quote(repo)}/tags?page_size=100"
     )
-    while next_url:
+    while next_url and remaining:
         request = urllib.request.Request(next_url)
         with urllib.request.urlopen(request, timeout=10) as response:
             data = json.loads(response.read().decode("utf-8"))
         for result in data.get("results", []):
             name = result.get("name")
-            if isinstance(name, str):
-                tags.add(name)
+            if isinstance(name, str) and name in remaining:
+                remaining.remove(name)
         next_url = data.get("next")
-    return tags
+    return remaining
 
 
 def normalize_bool(value: object) -> bool:
@@ -128,9 +128,19 @@ def main() -> int:
     targets = discover_targets(versions_files)
     namespace, repo = args.repository.split("/", 1)
 
-    existing_tags: Set[str] = set()
+    desired_tags: set[str] = set()
+    for target in targets:
+        for version in target.versions:
+            if args.only_version and version != args.only_version:
+                continue
+            for export in target.exports:
+                desired_tags.add(f"{version}-{export}")
+
+    missing: set[str] = set()
     if not args.force:
-        existing_tags = fetch_existing_tags(namespace, repo)
+        missing = missing_tags(namespace, repo, desired_tags)
+    else:
+        missing = desired_tags
 
     include: list[dict[str, str]] = []
     for target in targets:
@@ -139,7 +149,7 @@ def main() -> int:
                 continue
             for export in target.exports:
                 tag = f"{version}-{export}"
-                if args.force or tag not in existing_tags:
+                if tag in missing:
                     include.append(
                         {
                             "family": target.name,
