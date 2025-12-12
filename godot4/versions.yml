@@ -1,6 +1,8 @@
-latest: 4.3
+latest: 4.5.1
 provides_latest: true
 versions:
+  - 4.5.1
+  - 4.5
   - 4.4.1
   - 4.4
   - 4.3
